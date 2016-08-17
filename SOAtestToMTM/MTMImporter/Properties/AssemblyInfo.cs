@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SOAtestXMLParser")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("SOAtestToMTM")]
+[assembly: AssemblyDescription("Imports SOAtest test runs into TFS")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SOAtestXMLParser")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCompany("Microsoft")]
+[assembly: AssemblyProduct("SOAtestToMTM")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("b3b856dd-1a52-48e2-92af-0ce08f4edb43")]
+[assembly: Guid("831a28d6-741a-4343-919f-c422dc7e44f3")]
 
 // Version information for an assembly consists of the following four values:
 //
