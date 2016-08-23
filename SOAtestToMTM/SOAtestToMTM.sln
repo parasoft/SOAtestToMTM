@@ -18,13 +18,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SOAtestToMTMTest", "SOAtest
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CF1AAE76-B99B-482C-9DAE-6C20FB57D912}"
 	ProjectSection(SolutionItems) = preProject
+		images\mtm.jpg = images\mtm.jpg
 		README.md = README.md
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{4F43C5BE-337C-4AA9-B36C-989159A37737}"
-	ProjectSection(SolutionItems) = preProject
-		..\..\..\..\Desktop\mtm.jpg = ..\..\..\..\Desktop\mtm.jpg
-		..\..\..\..\Desktop\requirement.jpg = ..\..\..\..\Desktop\requirement.jpg
+		images\requirement.jpg = images\requirement.jpg
 	EndProjectSection
 EndProject
 Global
@@ -48,8 +44,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{4F43C5BE-337C-4AA9-B36C-989159A37737} = {CF1AAE76-B99B-482C-9DAE-6C20FB57D912}
 	EndGlobalSection
 EndGlobal
