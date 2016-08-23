@@ -22,7 +22,7 @@ The format of SOAtest reports may be in future updates and how to parse the repo
 ### SOAtest
 User must configure the root Test Suite in a tst file with the correct Requirement information that corresponds to the Test Plan sturcture in MTM.
 
-!(/images/requirement.jpg)
+![SOAtest Screenshot](/images/requirement.jpg)
 
 In Requirement and Notes tab of each Test Suite, add the association for each test. Association added for each Test Suite will be inherited by its children.
 
@@ -55,7 +55,7 @@ TestPlan
 
 ### MTM
 Same structure in MTM
-!(/images/mtm.jpg)
+![MTM Screenshot](/images/mtm.jpg)
 
 
 ## Pasring SOAtest results (report.xml)
