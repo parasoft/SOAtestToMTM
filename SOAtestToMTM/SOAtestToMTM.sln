@@ -21,6 +21,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{4F43C5BE-337C-4AA9-B36C-989159A37737}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\..\Desktop\mtm.jpg = ..\..\..\..\Desktop\mtm.jpg
+		..\..\..\..\Desktop\requirement.jpg = ..\..\..\..\Desktop\requirement.jpg
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +48,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4F43C5BE-337C-4AA9-B36C-989159A37737} = {CF1AAE76-B99B-482C-9DAE-6C20FB57D912}
 	EndGlobalSection
 EndGlobal

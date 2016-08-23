@@ -7,6 +7,56 @@ This solution includes two projects:
 A `SOAtestParser` example to show how to parse SOAtest reports. 
 An `MTMImporter` to take the results and send to Team Foundation Server.  
 
+## Prerequisites
+
+This example supports 
+* SOAtest 9.8 
+* Team Foundation Sever (version )
+* Visual Studio 2013, 2015
+
+SOAtest and MTM must be set up correctly with the same assocation structure.
+
+###### Disclaimer
+The format of SOAtest reports may be in future updates and how to parse the report will need to be adjusted.
+
+### SOAtest
+User must configure the root Test Suite in a tst file with the correct Requirement information that corresponds to the Test Plan sturcture in MTM.
+
+!(/images/requirement.jpg)
+
+In Requirement and Notes tab of each Test Suite, add the association for each test. Association added for each Test Suite will be inherited by its children.
+
+@req is representing a Test Run
+@pr is representing a Test Case
+
+The test results correlated in the following logic:
+In each test run (associated with @req) can contain multiple test cases (associated with @pr), each indivdual test results in SOAtest are considered as steps for each test case.
+
+```
+Example.tst
+ ---TestSuite associates with @req 1
+   ---Test associated with @pr 2
+   ---Test associated with @pr 2
+ ---TestSuite associates with @req 3
+   ---Test associated with @pr 4
+```
+
+will be translated into this in TFS
+
+```
+TestPlan
+ ---Test Run with id 1
+  ---Test Case with id 2
+     ---two test steps
+ ---Test Run with id 3
+  ---Test Case with id 4
+```
+
+
+### MTM
+Same structure in MTM
+!(/images/mtm.jpg)
+
 
 ## Pasring SOAtest results (report.xml)
 
@@ -44,7 +94,7 @@ The attributes used in `Test` elements are:
 * `startTime` is the time in ms that the test started
 * `time` is the duration of the test until completion
 
-###### assoc
+##### assoc
 `assoc` element are children of `Test`, it contains the requirement association that user has specified in each test suite.
 * `tag` is the association tag we will be using to determine if the test associated to a Test Run "req" or a Test Case "pr"
 * `id` is the corresponding id of the Test Run or Test Casein TFS
@@ -56,7 +106,24 @@ The attributes used in `Test` elements are:
 * `msg` is the failure message, which use be added as a comment to the Test Case.
 * `testCaseId` is the id of the test case that has this failure
 
-###### Disclaimer
-The format of SOAtest reports may be in future updates and parser will needs to be adjusted.
-
 ## Importing results into MTM
+
+The `MTMImporter` project is utilizing the [Team Foundation Server API](https://msdn.microsoft.com/en-us/library/bb130146(v=vs.120).aspx) to construct results for Test Plans.
+It re-maps the parsed ResultSession object into a a list of `TFSTestRun` and create run results in MTM.
+The test results are re-arranged in the logic mentioned in the prerequisites:
+In each test run (associated with @req) can contain multiple test cases (associated with @pr), each indivdual test results in SOAtest are considered as steps for each test case.
+
+
+### Using the importer
+
+#### How to Build
+
+#### Parameters
+The executable 
+
+#### How to Run
+
+## License
+
+
+## Reference
