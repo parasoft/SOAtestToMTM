@@ -141,6 +141,60 @@ In each test run (associated with @req) can contain multiple test cases (associa
 
 
 ## License
+Please consult the attached LICENSE file for details. All rights not explicitly granted by the Apache 2.0 license are reserved by the Parasoft Corporation.
 
+## Third Party
+Active Directory Authentication Library
+Microsoft Corporation
+Version 2.22.302111727
+https://github.com/AzureAD/azure-activedirectory-library-for-dotnet/blob/master/LICENSE
 
-## Reference
+JSON Web Token Handler For the Microsoft .Net Framework 4.5
+Microsoft Corporation
+Version 4.0.2.206221351
+https://github.com/AzureAD/azure-activedirectory-identitymodel-extensions-for-dotnet/blob/master/LICENSE.txt
+
+Json.NET
+James Newton-King
+Version 8.0.2
+https://raw.githubusercontent.com/JamesNK/Newtonsoft.Json/master/LICENSE.md
+
+Microsoft Visual Studio Services Client
+Microsoft Corporation
+version 14.89.0
+https://www.microsoft.com/net/dotnet_library_license.htm
+
+Microsoft Visual Studio Services Client (Interactive)
+Microsoft Corporation
+version 14.89.0
+https://www.microsoft.com/net/dotnet_library_license.htm
+
+Miscrosoft ASP.NET Web API 2.2 Client Libraries
+Microsoft Corporation
+Version 5.2.3
+https://www.microsoft.com/web/webpi/eula/net_library_eula_enu.htm
+
+Miscrosoft ASP.NET Web API 2.2 Core Libraries
+Microsoft Corporation
+Version 5.2.3
+https://www.microsoft.com/web/webpi/eula/net_library_eula_enu.htm
+
+Microsoft Azure Service Bus
+Microsoft Corporation
+Version 3.1.3
+http://go.microsoft.com/fwlink?LinkId=218949
+
+Microsoft Azure Configuration Manager
+Microsoft Corporation
+Version 3.2.1
+https://raw.githubusercontent.com/WindowsAzure/azure-sdk-for-net/master/LICENSE.txt
+
+Microsoft Team Foundation Server Client
+Microsoft Corporation
+version 14.89.0
+https://www.microsoft.com/net/dotnet_library_license.htm
+
+Microsoft Team Foundation Server Extended Client
+Microsoft Corporation
+version 14.89.0
+https://www.microsoft.com/net/dotnet_library_license.htm

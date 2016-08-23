@@ -208,7 +208,7 @@ namespace SOAtestToMTM
                     run.Comment = testRun.Comment;
                 }
 
-                if (testRun.DateCompleted !=null)
+                if (testRun.DateCompleted != default(DateTime))
                 {
                     run.DateCompleted = testRun.DateCompleted;
                 }
