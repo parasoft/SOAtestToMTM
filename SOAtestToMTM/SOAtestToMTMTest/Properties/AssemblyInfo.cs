@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MTMImporter")]
+[assembly: AssemblyTitle("SOAtestToMTMTest")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MTMImporter")]
+[assembly: AssemblyProduct("SOAtestToMTMTest")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("fa49f25a-43ca-4d49-b247-451c7c795ce8")]
+[assembly: Guid("1a38e20b-9227-4ef4-a83a-8e0d2d2bad5b")]
 
 // Version information for an assembly consists of the following four values:
 //

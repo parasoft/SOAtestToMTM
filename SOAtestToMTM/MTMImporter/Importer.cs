@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Json;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.TeamFoundation;
+﻿using Microsoft.TeamFoundation;
 using Microsoft.TeamFoundation.Build.Client;
 using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.Framework.Client;
 using Microsoft.TeamFoundation.Framework.Common;
 using Microsoft.TeamFoundation.TestManagement.Client;
+using System;
+using System.Collections.Generic;
+using System.Net;
 
-namespace MTMImporter
+namespace SOAtestToMTM
 {
-    class Importer
+    public class Importer
     {
         private readonly TfsTeamProjectCollection tpc;
         private readonly IDictionary<string, TeamFoundationIdentity> identities;
@@ -36,190 +29,196 @@ namespace MTMImporter
             identities = new Dictionary<string, TeamFoundationIdentity>();
         }
 
-        public void Import(string teamProject, DATestRun testRun)
+        public void Import(string teamProject, List<TFSTestRun> testRuns)
         {
             var ims = tpc.GetService<IIdentityManagementService>();
             var tms = tpc.GetService<ITestManagementService>();
             var project = tms.GetTeamProject(teamProject);
-            var configuration = GetTestConfiguration(project, testRun.ConfigurationName);
-            var testPlan = GetTestPlan(project, testRun.TestPlanId);
-
-            var run = testPlan.CreateTestRun(true);
-
-            if (testRun.Title != null)
+            foreach (TFSTestRun testRun in testRuns)
             {
-                run.Title = testRun.Title;
-            }
+                var configuration = GetTestConfiguration(project, testRun.ConfigurationName);
+                var testPlan = GetTestPlan(project, testRun.TestPlanId);
 
-            if (testRun.DateStarted != null)
-            {
-                run.DateStarted = DateTime.Parse(testRun.DateStarted);
-            }
-
-            if (testRun.OwnerName != null)
-            {
-                TeamFoundationIdentity identity;
-                if (TryGetIdentity(ims, testRun.OwnerName, out identity))
+                var run = testPlan.CreateTestRun(true);
+                if (testRun.Title != null)
                 {
-                    run.Owner = identity;
+                    run.Title = testRun.Title;
                 }
-            }
 
-            if (testRun.BuildNumber != null)
-            {
-                run.BuildNumber = testRun.BuildNumber;
-
-                IBuildDetail buildDetail;
-                if (TryGetBuildDetail(teamProject, testRun.BuildNumber, out buildDetail))
+                if (testRun.DateStarted != null)
                 {
-                    run.BuildUri = buildDetail.Uri;
+                    run.DateStarted = testRun.DateStarted;
                 }
-            }
 
-            if (testRun.TestEnvironment != null)
-            {
-                ITestEnvironment environment;
-                if (TryGetTestEnvironment(project, testRun.TestEnvironment, out environment))
+                if (testRun.OwnerName != null)
                 {
-                    run.TestEnvironmentId = environment.Id;
-                }
-            }
-
-            // Add all the associated test points.
-            var testPointQuery = String.Format("SELECT * FROM TestPoint WHERE ConfigurationId = '{0}'", configuration.Id);
-            foreach (var testPoint in testPlan.QueryTestPoints(testPointQuery))
-            {
-                foreach (var testCase in testRun.TestCases)
-                {
-                    if (testCase.TestCaseId.Equals(testPoint.TestCaseId))
+                    TeamFoundationIdentity identity;
+                    if (TryGetIdentity(ims, testRun.OwnerName, out identity))
                     {
-                        run.AddTestPoint(testPoint, null);
-                        break;
+                        run.Owner = identity;
                     }
                 }
-            }
 
-            // Save so the test results can be created.
-            run.Save();
-
-            var failureTypes = project.TestFailureTypes.Query();
-            var resolutionStates = project.TestResolutionStates.Query();
-
-            // Configure the test results.
-            foreach (var result in run.QueryResults())
-            {
-                foreach (var testCase in testRun.TestCases)
+                if (testRun.BuildNumber != null)
                 {
-                    if (testCase.TestCaseId.Equals(result.TestCaseId))
+                    run.BuildNumber = testRun.BuildNumber;
+
+                    IBuildDetail buildDetail;
+                    if (TryGetBuildDetail(teamProject, testRun.BuildNumber, out buildDetail))
                     {
-                        if (testCase.DateStarted != null)
-                        {
-                            result.DateStarted = DateTime.Parse(testCase.DateStarted);
-                        }
+                        run.BuildUri = buildDetail.Uri;
+                    }
+                }
 
-                        if (testCase.DateCompleted != null)
-                        {
-                            result.DateCompleted = DateTime.Parse(testCase.DateCompleted);
-                        }
+                if (testRun.TestEnvironment != null)
+                {
+                    ITestEnvironment environment;
+                    if (TryGetTestEnvironment(project, testRun.TestEnvironment, out environment))
+                    {
+                        run.TestEnvironmentId = environment.Id;
+                    }
+                }
 
-                        if (result.DateStarted != null && result.DateCompleted != null)
+                // Add all the associated test points.
+                var testPointQuery = String.Format("SELECT * FROM TestPoint WHERE ConfigurationId = '{0}'", configuration.Id);
+                foreach (var testPoint in testPlan.QueryTestPoints(testPointQuery))
+                {
+                    foreach (var testCase in testRun.TestCases.Values)
+                    {
+                        if (testCase.TestCaseId.Equals(testPoint.TestCaseId))
                         {
-                            result.Duration = result.DateCompleted - result.DateStarted;
-                        }
-
-                        switch (testCase.Status)
-                        {
-                            case 0:
-                                result.Outcome = TestOutcome.Passed;
-                                result.State = TestResultState.Completed;
-                                break;
-                            case 1:
-                                result.Outcome = TestOutcome.Failed;
-                                result.State = TestResultState.Completed;
-                                break;
-                            case 2:
-                                result.Outcome = TestOutcome.Inconclusive;
-                                result.State = TestResultState.Unspecified;
-                                break;
-                        }
-
-                        if (testCase.ErrorMessage != null)
-                        {
-                            result.ErrorMessage = testCase.ErrorMessage;
-                        }
-
-                        if (testCase.Comment != null)
-                        {
-                            result.Comment = testCase.Comment;
-                        }
-
-                        if (testCase.OwnerName != null)
-                        {
-                            TeamFoundationIdentity identity;
-                            if (TryGetIdentity(ims, testCase.OwnerName, out identity))
-                            {
-                                result.Owner = identity;
-                            }
-                        }
-
-                        if (testCase.RunByName != null)
-                        {
-                            TeamFoundationIdentity identity;
-                            if (TryGetIdentity(ims, testCase.RunByName, out identity))
-                            {
-                                result.RunBy = identity;
-                            }
-                        }
-
-                        if (testCase.FailureType != null)
-                        {
-                            var id = -1;
-                            if (TryGetFailureTypeId(failureTypes, testCase.FailureType, out id))
-                            {
-                                result.FailureTypeId = id;
-                            }
-                            
-                        }
-
-                        if (testCase.Priority.HasValue)
-                        {
-                            result.Priority = testCase.Priority.Value;
-                        }
-
-                        if (testCase.ResolutionState != null)
-                        {
-                            var id = -1;
-                            if (TryGetResolutionStateId(resolutionStates, testCase.ResolutionState, out id))
-                            {
-                                result.ResolutionStateId = id;
-                            }
+                            run.AddTestPoint(testPoint, null);
+                            break;
                         }
                     }
                 }
 
-                // Save the results.
-                result.Save();
+                // Save so the test results can be created.
+                run.Save();
+
+                var failureTypes = project.TestFailureTypes.Query();
+                var resolutionStates = project.TestResolutionStates.Query();
+
+                // Configure the test results.
+                foreach (var result in run.QueryResults())
+                {
+                    foreach (var testCase in testRun.TestCases.Values)
+                    {
+                        if (testCase.TestCaseId.Equals(result.TestCaseId))
+                        {
+                            if (testCase.DateStarted != null)
+                            {
+                                result.DateStarted = testCase.DateStarted;
+                            }
+
+                            if (testCase.DateCompleted != null)
+                            {
+                                result.DateCompleted = testCase.DateCompleted;
+                            }
+
+                            if (result.DateStarted != null && result.DateCompleted != null)
+                            {
+                                result.Duration = result.DateCompleted - result.DateStarted;
+                            }
+
+                            switch (testCase.Status)
+                            {
+                                case 0:
+                                    result.Outcome = TestOutcome.Passed;
+                                    result.State = TestResultState.Completed;
+                                    break;
+                                case 1:
+                                    result.Outcome = TestOutcome.Failed;
+                                    result.State = TestResultState.Completed;
+                                    break;
+                                case 2:
+                                    result.Outcome = TestOutcome.Inconclusive;
+                                    result.State = TestResultState.Unspecified;
+                                    break;
+                                default:
+                                    //do nothing
+                                    break;
+                            }
+
+                            if (testCase.ErrorMessage != null)
+                            {
+                                result.ErrorMessage = testCase.ErrorMessage;
+                            }
+
+                            if (testCase.Comment != null)
+                            {
+                                result.Comment = testCase.Comment;
+                            }
+
+                            if (testCase.OwnerName != null)
+                            {
+                                TeamFoundationIdentity identity;
+                                if (TryGetIdentity(ims, testCase.OwnerName, out identity))
+                                {
+                                    result.Owner = identity;
+                                }
+                            }
+
+                            if (testCase.RunByName != null)
+                            {
+                                TeamFoundationIdentity identity;
+                                if (TryGetIdentity(ims, testCase.RunByName, out identity))
+                                {
+                                    result.RunBy = identity;
+                                }
+                            }
+
+                            if (testCase.FailureType != null)
+                            {
+                                var id = -1;
+                                if (TryGetFailureTypeId(failureTypes, testCase.FailureType, out id))
+                                {
+                                    result.FailureTypeId = id;
+                                }
+
+                            }
+
+                            if (testCase.Priority.HasValue)
+                            {
+                                result.Priority = testCase.Priority.Value;
+                            }
+
+                            if (testCase.ResolutionState != null)
+                            {
+                                var id = -1;
+                                if (TryGetResolutionStateId(resolutionStates, testCase.ResolutionState, out id))
+                                {
+                                    result.ResolutionStateId = id;
+                                }
+                            }
+                        }
+                    }
+
+                    // Save the results.
+                    result.Save();
+                }
+
+                // Refresh the run and set completion time and state.
+                run.Refresh();
+
+                // Comment can only be added after first save.
+                if (testRun.Comment != null)
+                {
+                    run.Comment = testRun.Comment;
+                }
+
+                if (testRun.DateCompleted != null)
+                {
+                    run.DateCompleted = testRun.DateCompleted;
+                }
+
+                run.State = TestRunState.Completed;
+                run.Save();
             }
 
-            // Refresh the run and set completion time and state.
-            run.Refresh();
-
-            // Comment can only be added after first save.
-            if (testRun.Comment != null)
-            {
-                run.Comment = testRun.Comment;
-            }
-
-            if (testRun.DateCompleted != null)
-            {
-                run.DateCompleted = DateTime.Parse(testRun.DateCompleted);
-            }
-
-            run.State = TestRunState.Completed;
-            run.Save();
         }
 
-        ITestPlan GetTestPlan(ITestManagementTeamProject project, int testPlanId)
+        private ITestPlan GetTestPlan(ITestManagementTeamProject project, int testPlanId)
         {
             var testPlan = project.TestPlans.Find(testPlanId);
             if (testPlan == null)
@@ -230,7 +229,7 @@ namespace MTMImporter
             return testPlan;
         }
 
-        ITestConfiguration GetTestConfiguration(ITestManagementTeamProject project, string configurationName)
+        private ITestConfiguration GetTestConfiguration(ITestManagementTeamProject project, string configurationName)
         {
             var configQuery = String.Format("SELECT * FROM TestConfiguration WHERE Name = '{0}'", configurationName);
             var configs = project.TestConfigurations.Query(configQuery);
@@ -242,7 +241,7 @@ namespace MTMImporter
             return configs[0];
         }
 
-        bool TryGetTestEnvironment(ITestManagementTeamProject project, string environmentName, out ITestEnvironment testEnvironment)
+        private bool TryGetTestEnvironment(ITestManagementTeamProject project, string environmentName, out ITestEnvironment testEnvironment)
         {
             foreach (var environment in project.TestEnvironments.Query())
             {
@@ -256,7 +255,7 @@ namespace MTMImporter
             return false;
         }
 
-        bool TryGetBuildDetail(string teamProject, string buildNumber, out IBuildDetail buildDetail)
+        private bool TryGetBuildDetail(string teamProject, string buildNumber, out IBuildDetail buildDetail)
         {
             var buildServer = tpc.GetService<IBuildServer>();
             if (buildServer != null)
@@ -276,7 +275,7 @@ namespace MTMImporter
             return false;
         }
 
-        bool TryGetIdentity(IIdentityManagementService ims, string accountName, out TeamFoundationIdentity identity)
+        private bool TryGetIdentity(IIdentityManagementService ims, string accountName, out TeamFoundationIdentity identity)
         {
 
             if (!identities.TryGetValue(accountName, out identity))
@@ -286,7 +285,7 @@ namespace MTMImporter
             return identity != null;
         }
 
-        bool TryGetFailureTypeId(IEnumerable<ITestFailureType> failureTypes, string name, out int id)
+        private bool TryGetFailureTypeId(IEnumerable<ITestFailureType> failureTypes, string name, out int id)
         {
             foreach (var failureType in failureTypes)
             {
@@ -300,7 +299,7 @@ namespace MTMImporter
             return false;
         }
 
-        bool TryGetResolutionStateId(IEnumerable<ITestResolutionState> resolutionStates, string name, out int id)
+        private bool TryGetResolutionStateId(IEnumerable<ITestResolutionState> resolutionStates, string name, out int id)
         {
             foreach (var resolutionState in resolutionStates)
             {
@@ -314,16 +313,19 @@ namespace MTMImporter
             return false;
         }
 
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             try
             {
+                validateArguments(args);
                 var uri = args[0];
                 var username = args[1];
                 var password = args[2];
                 var domain = args[3];
                 var teamProject = args[4];
-                var testRun = LoadTestRunFile(args[5]);
+                Parser parser = new Parser();
+                var resultsSession = parser.parse(args[5]);
+                var testRun = convertResultToTestRun(resultsSession);
                 var importer = new Importer(uri, username, password, domain);
                 importer.Import(teamProject, testRun);
             }
@@ -337,98 +339,94 @@ namespace MTMImporter
             }
         }
 
-        static DATestRun LoadTestRunFile(string file)
+        private static void validateArguments(string[] args)
         {
-            using (FileStream stream = File.Open(file, FileMode.Open))
+            if (args.Length < 6)
             {
-                var serializer = new DataContractJsonSerializer(typeof(DATestRun));
-                return serializer.ReadObject(stream) as DATestRun;
+                throw new ImportException("There are missing required parameters. Please use the executatble with the following arguments: 1. TFS uri 2. TFS username 3. TFS password 4.TFS domain 5.TFS Project 6. SOAtest report.xml");
             }
         }
 
-        static void Error(Exception e)
+        public static List<TFSTestRun> convertResultToTestRun(ResultsSession results)
+        {
+            if (results == null)
+            {
+                throw new ImportException("Error parsing report.xml, no results session is found.");
+            }
+
+            Dictionary<int, TFSTestRun> testRuns = new Dictionary<int, TFSTestRun>();
+            //loop over tests to find test plans and test cases
+            foreach (Test test in results.TestCases.Values)
+            {
+                HashSet<int> testPlanIds = new HashSet<int>();
+                HashSet<int> testCaseIds = new HashSet<int>();
+                foreach (TestAssoc assoc in test.Assoc)
+                {
+                    //tests with tag "req" are plans, and tests with "pr" are test cases
+                    switch (assoc.Tag)
+                    {
+                        case "req":
+                            testPlanIds.Add(assoc.Id);
+                            break;
+                        case "pr":
+                            testCaseIds.Add(assoc.Id);
+                            break;
+                        default:
+                            //this example only works with req and pr, otherwise do nothing
+                            break;
+                    }
+                }
+
+                //generate plan/testcase mapping
+                foreach (int testPlanId in testPlanIds)
+                {
+                    TFSTestRun testRun = null;
+                    //if there is no existing test plan id, create a new test run
+                    if (!testRuns.TryGetValue(testPlanId, out testRun))
+                    {
+                        testRun = new TFSTestRun();
+                        testRun.BuildNumber = results.BuildId;
+                        //append comment to indicate run is auto imported.
+                        testRun.Comment = "This test run was imported via SOAtestToMTM example";
+                        //append title to indicate run is from SOAtest
+                        testRun.Title = "SOAtest Test Run";
+                        testRun.TestEnvironment = results.Tag;
+                        testRun.ConfigurationName = results.Config;
+                        testRun.DateStarted = results.Time;
+                        testRun.OwnerName = results.User;
+                        testRun.TestPlanId = testPlanId;
+                        testRun.DateStarted = test.StartTime;
+                        testRun.DateCompleted = test.StartTime.Add(test.Time);
+                        testRuns.Add(testPlanId, testRun);
+                    }
+
+
+                    foreach (int testCaseId in testCaseIds)
+                    {
+                        //add test case to each associated test runs and update its test duration
+                        testRun.AddTestCase(testCaseId, test);
+                    }
+                }
+
+
+            }
+
+            return new List<TFSTestRun>(testRuns.Values);
+        }
+
+        private static void Error(Exception e)
         {
             Console.Error.WriteLine(e.Message);
             Environment.Exit(1);
         }
-    }
 
-    [DataContract]
-    internal class DATestCase
-    {
-        [DataMember(Name = "testCaseId")]
-        public int TestCaseId { get; set; }
 
-        [DataMember(Name = "dateStarted")]
-        public string DateStarted { get; set; }
+        private class ImportException : Exception
+        {
+            public ImportException() : base() { }
+            public ImportException(string message) : base(message) { }
+            public ImportException(string message, Exception cause) : base(message, cause) { }
 
-        [DataMember(Name = "dateCompleted")]
-        public string DateCompleted { get; set; }
-
-        [DataMember(Name = "status")]
-        public int Status { get; set; }
-
-        [DataMember(Name = "errorMessage")]
-        public string ErrorMessage { get; set; }
-
-        [DataMember(Name = "comment")]
-        public string Comment { get; set; }
-
-        [DataMember(Name = "priority")]
-        public int? Priority { get; set; }
-
-        [DataMember(Name = "ownerName")]
-        public string OwnerName { get; set; }
-
-        [DataMember(Name = "runByName")]
-        public string RunByName { get; set; }
-
-        [DataMember(Name = "failureType")]
-        public string FailureType { get; set; }
-
-        [DataMember(Name = "resolutionState")]
-        public string ResolutionState { get; set; }
-    }
-
-    [DataContract]
-    internal class DATestRun
-    {
-
-        [DataMember(Name = "testPlanId")]
-        public int TestPlanId { get; set; }
-
-        [DataMember(Name = "configurationName")]
-        public string ConfigurationName { get; set; }
-
-        [DataMember(Name = "title")]
-        public string Title { get; set; }
-
-        [DataMember(Name = "dateStarted")]
-        public string DateStarted { get; set; }
-
-        [DataMember(Name = "dateCompleted")]
-        public string DateCompleted { get; set; }
-
-        [DataMember(Name = "comment")]
-        public string Comment { get; set; }
-
-        [DataMember(Name = "testEnvironment")]
-        public string TestEnvironment { get; set; }
-
-        [DataMember(Name = "buildNumber")]
-        public string BuildNumber { get; set; }
-
-        [DataMember(Name = "ownerName")]
-        public string OwnerName { get; set; }
-
-        [DataMember(Name = "testCases")]
-        public List<DATestCase> TestCases { get; set; }
-    }
-
-    internal class ImportException : Exception
-    {
-        public ImportException() : base() { }
-        public ImportException(string message) : base(message) { }
-        public ImportException(string message, Exception cause) : base(message, cause) { }
+        }
     }
 }
