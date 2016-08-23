@@ -10,9 +10,9 @@ An `MTMImporter` to take the results and send to Team Foundation Server.
 ## Prerequisites
 
 This example supports 
-* SOAtest 9.8 
-* Team Foundation Sever (version )
-* Visual Studio 2013, 2015
+* SOAtest 9.9 
+* Team Foundation Sever 2013 or above
+* Visual Studio 2013 or above
 
 SOAtest and MTM must be set up correctly with the same assocation structure.
 
@@ -56,6 +56,31 @@ TestPlan
 ### MTM
 Same structure in MTM
 ![MTM Screenshot](/SOAtestToMTM/images/mtm.jpg)
+
+
+## How to Build
+
+### Visual Studio
+* Open SOAtestToMTM solution in Visual Studio
+* Update missing Nuget Dependencies
+* Build Solution
+
+### Command Line
+TBA
+
+## How to Run
+The executable requires the uri to Team Foundation Server and the valid credentials. A valid project name is also required to import SOAtest Result.
+In command prompt, run the executable with the following arguments:
+```
+MTMImporter.exe <TFS uri> <TFS username> <TFS password> <TFS domain> <TFS Project> <path to SOAtest report.xml>
+```
+
+When import is completed without error, the following message will be displayed
+
+```
+C:\Example>MTMImporter.exe http://tfs2013.parasoft.com:8080/tfs/DefaultCollection username password PARASOFT "Project A" "C:\Report\report.xml"
+Import completed
+```
 
 
 ## Pasring SOAtest results (report.xml)
@@ -114,14 +139,6 @@ The test results are re-arranged in the logic mentioned in the prerequisites:
 In each test run (associated with @req) can contain multiple test cases (associated with @pr), each indivdual test results in SOAtest are considered as steps for each test case.
 
 
-### Using the importer
-
-#### How to Build
-
-#### Parameters
-The executable 
-
-#### How to Run
 
 ## License
 

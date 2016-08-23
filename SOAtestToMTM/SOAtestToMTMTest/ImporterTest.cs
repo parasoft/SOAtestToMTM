@@ -14,7 +14,7 @@ namespace SOAtestToMTM
             string filePath = @"..\..\TestData\report.xml";
             ResultsSession rs = parser.parse(filePath);
             List<TFSTestRun> testRuns = Importer.convertResultToTestRun(rs);
-            Assert.AreEqual(testRuns.Count, 3);
+            Assert.AreEqual(testRuns.Count, 1);
             
         }
     }

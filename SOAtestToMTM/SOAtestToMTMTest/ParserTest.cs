@@ -35,5 +35,6 @@ namespace SOAtestToMTM
             string filePath = @"..\..\TestData\report1.xml";
             ResultsSession rs = parser.parse(filePath);
         }
+
     }
 }

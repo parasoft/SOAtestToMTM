@@ -7,6 +7,7 @@ using Microsoft.TeamFoundation.TestManagement.Client;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.IO;
 
 namespace SOAtestToMTM
 {
@@ -40,17 +41,17 @@ namespace SOAtestToMTM
                 var testPlan = GetTestPlan(project, testRun.TestPlanId);
 
                 var run = testPlan.CreateTestRun(true);
-                if (testRun.Title != null)
+                if (!string.IsNullOrEmpty(testRun.Title))
                 {
                     run.Title = testRun.Title;
                 }
 
-                if (testRun.DateStarted != null)
+                if (testRun.DateStarted != default(DateTime))
                 {
                     run.DateStarted = testRun.DateStarted;
                 }
 
-                if (testRun.OwnerName != null)
+                if (!string.IsNullOrEmpty(testRun.OwnerName))
                 {
                     TeamFoundationIdentity identity;
                     if (TryGetIdentity(ims, testRun.OwnerName, out identity))
@@ -59,7 +60,7 @@ namespace SOAtestToMTM
                     }
                 }
 
-                if (testRun.BuildNumber != null)
+                if (!string.IsNullOrEmpty(testRun.BuildNumber))
                 {
                     run.BuildNumber = testRun.BuildNumber;
 
@@ -70,7 +71,7 @@ namespace SOAtestToMTM
                     }
                 }
 
-                if (testRun.TestEnvironment != null)
+                if (!string.IsNullOrEmpty(testRun.TestEnvironment))
                 {
                     ITestEnvironment environment;
                     if (TryGetTestEnvironment(project, testRun.TestEnvironment, out environment))
@@ -106,17 +107,17 @@ namespace SOAtestToMTM
                     {
                         if (testCase.TestCaseId.Equals(result.TestCaseId))
                         {
-                            if (testCase.DateStarted != null)
+                            if (testCase.DateStarted != default(DateTime))
                             {
                                 result.DateStarted = testCase.DateStarted;
                             }
 
-                            if (testCase.DateCompleted != null)
+                            if (testCase.DateCompleted != default(DateTime))
                             {
                                 result.DateCompleted = testCase.DateCompleted;
                             }
 
-                            if (result.DateStarted != null && result.DateCompleted != null)
+                            if (result.DateStarted != default(DateTime) && result.DateCompleted != default(DateTime))
                             {
                                 result.Duration = result.DateCompleted - result.DateStarted;
                             }
@@ -140,17 +141,17 @@ namespace SOAtestToMTM
                                     break;
                             }
 
-                            if (testCase.ErrorMessage != null)
+                            if (!string.IsNullOrEmpty(testCase.ErrorMessage))
                             {
                                 result.ErrorMessage = testCase.ErrorMessage;
                             }
 
-                            if (testCase.Comment != null)
+                            if (!string.IsNullOrEmpty(testCase.Comment))
                             {
                                 result.Comment = testCase.Comment;
                             }
 
-                            if (testCase.OwnerName != null)
+                            if (!string.IsNullOrEmpty(testCase.OwnerName))
                             {
                                 TeamFoundationIdentity identity;
                                 if (TryGetIdentity(ims, testCase.OwnerName, out identity))
@@ -159,7 +160,7 @@ namespace SOAtestToMTM
                                 }
                             }
 
-                            if (testCase.RunByName != null)
+                            if (!string.IsNullOrEmpty(testCase.RunByName))
                             {
                                 TeamFoundationIdentity identity;
                                 if (TryGetIdentity(ims, testCase.RunByName, out identity))
@@ -168,7 +169,7 @@ namespace SOAtestToMTM
                                 }
                             }
 
-                            if (testCase.FailureType != null)
+                            if (!string.IsNullOrEmpty(testCase.FailureType))
                             {
                                 var id = -1;
                                 if (TryGetFailureTypeId(failureTypes, testCase.FailureType, out id))
@@ -183,7 +184,7 @@ namespace SOAtestToMTM
                                 result.Priority = testCase.Priority.Value;
                             }
 
-                            if (testCase.ResolutionState != null)
+                            if (!string.IsNullOrEmpty(testCase.ResolutionState))
                             {
                                 var id = -1;
                                 if (TryGetResolutionStateId(resolutionStates, testCase.ResolutionState, out id))
@@ -202,12 +203,12 @@ namespace SOAtestToMTM
                 run.Refresh();
 
                 // Comment can only be added after first save.
-                if (testRun.Comment != null)
+                if (string.IsNullOrEmpty(testRun.Comment))
                 {
                     run.Comment = testRun.Comment;
                 }
 
-                if (testRun.DateCompleted != null)
+                if (testRun.DateCompleted !=null)
                 {
                     run.DateCompleted = testRun.DateCompleted;
                 }
@@ -329,13 +330,29 @@ namespace SOAtestToMTM
                 var importer = new Importer(uri, username, password, domain);
                 importer.Import(teamProject, testRun);
             }
+            catch (FileNotFoundException e)
+            {
+                Error("SOAtest report not found, " + args[5] + " does not exist");
+            }
             catch (ImportException e)
             {
-                Error(e);
+                Error(e.Message);
             }
             catch (TeamFoundationServerException e)
             {
-                Error(e);
+                Error(e.Message);
+            }
+            catch (System.Xml.XmlException e)
+            {
+                Error(e.Message);
+            }
+            catch(System.UriFormatException e)
+            {
+                Error("Invalid TFS Uri provided: " + args[0]);
+            }
+            finally
+            {
+                Console.WriteLine("Import completed");
             }
         }
 
@@ -343,7 +360,7 @@ namespace SOAtestToMTM
         {
             if (args.Length < 6)
             {
-                throw new ImportException("There are missing required parameters. Please use the executatble with the following arguments: 1. TFS uri 2. TFS username 3. TFS password 4.TFS domain 5.TFS Project 6. SOAtest report.xml");
+                throw new ImportException("There are missing required parameters. The executable expects the following arguments:" + Environment.NewLine + "MTMImporter.exe <TFS uri> <TFS username> <TFS password> <TFS domain> <TFS Project> <path to SOAtest report.xml>");
             }
         }
 
@@ -414,14 +431,15 @@ namespace SOAtestToMTM
             return new List<TFSTestRun>(testRuns.Values);
         }
 
-        private static void Error(Exception e)
+        private static void Error(string message)
         {
-            Console.Error.WriteLine(e.Message);
+            Console.Error.WriteLine(message);
             Environment.Exit(1);
         }
 
 
-        private class ImportException : Exception
+        [Serializable]
+        private sealed class ImportException : Exception
         {
             public ImportException() : base() { }
             public ImportException(string message) : base(message) { }
