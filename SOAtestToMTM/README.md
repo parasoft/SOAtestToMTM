@@ -61,7 +61,7 @@ Same structure in MTM
 ## How to Build
 
 ### Visual Studio
-* Open Sthe OAtestToMTM solution in Visual Studio
+* Open the SOAtestToMTM solution in Visual Studio
 * Update the missing Nuget Dependencies
 * Build the Solution
 
