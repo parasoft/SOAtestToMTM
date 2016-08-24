@@ -44,7 +44,7 @@ Example.tst
 will be translated into this in TFS
 
 ```
-Test Plan
+TestPlan
  ---Test Run with id 1
   ---Test Case with id 2
      ---two test steps
@@ -99,8 +99,8 @@ Our example uses XMLReader for the sake of simplicity and efficiencys. It expect
 ResultsSession is the root element in SOAtest report.xml. The following attributes will be used to populate information for a MTM Test Run.
 * `buildId`: For build number
 * `project`: For project name
-* `tag`: For test environment. Note that tag is a user-defined field ("Session Tag" in SOAtest). It can be used to group multiple reports-- in this case, a test environment.
-* `time`: For test start time
+* `tag`: For test environment. Note that tag is a user-defined field ("Session Tag" in SOAtest). It can be used to group multiple reports-- in this case, a test environment
+* `time`: For time start time 
 
 ##### TestConfig
 `TestConfig` is the first child element in `ResultsSession`
