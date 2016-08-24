@@ -44,7 +44,7 @@ Example.tst
 will be translated into this in TFS
 
 ```
-TestPlan
+Test Plan
  ---Test Run with id 1
   ---Test Case with id 2
      ---two test steps
@@ -100,7 +100,7 @@ ResultsSession is the root element in SOAtest report.xml. The following attribut
 * `buildId`: For build number
 * `project`: For project name
 * `tag`: For test environment. Note that tag is a user-defined field ("Session Tag" in SOAtest). It can be used to group multiple reports-- in this case, a test environment.
-* `time`: For time start time, we will have to calculate the test end time based of this.
+* `time`: For test start time
 
 ##### TestConfig
 `TestConfig` is the first child element in `ResultsSession`

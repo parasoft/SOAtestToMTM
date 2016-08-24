@@ -12,7 +12,7 @@ namespace SOAtestToMTM
         {
             Parser parser = new Parser();
             string filePath = @"..\..\TestData\report.xml";
-            ResultsSession rs = parser.parse(filePath);
+            ResultsSession rs = parser.Parse(filePath);
             Assert.AreEqual<String>(rs.Project, "Default Project");
             Assert.AreEqual<String>(rs.Config, "Example Configuration");
             Assert.AreEqual<String>(rs.Tag, "Example Configuration");
@@ -33,7 +33,7 @@ namespace SOAtestToMTM
         {
             Parser parser = new Parser();
             string filePath = @"..\..\TestData\report1.xml";
-            ResultsSession rs = parser.parse(filePath);
+            ResultsSession rs = parser.Parse(filePath);
         }
 
     }

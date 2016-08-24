@@ -12,7 +12,7 @@ namespace SOAtestToMTM
         /// </summary>
         /// <param name="pathToXmlFile">full path to file</param>
         /// <returns>ResultsSession Object</returns>
-        public ResultsSession parse(string pathToXmlFile)
+        public ResultsSession Parse(string pathToXmlFile)
         {
             string filePath = @pathToXmlFile;
             if (File.Exists(filePath))

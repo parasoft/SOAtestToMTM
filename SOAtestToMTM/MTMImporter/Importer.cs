@@ -318,15 +318,15 @@ namespace SOAtestToMTM
         {
             try
             {
-                validateArguments(args);
+                ValidateArguments(args);
                 var uri = args[0];
                 var username = args[1];
                 var password = args[2];
                 var domain = args[3];
                 var teamProject = args[4];
                 Parser parser = new Parser();
-                var resultsSession = parser.parse(args[5]);
-                var testRun = convertResultToTestRun(resultsSession);
+                var resultsSession = parser.Parse(args[5]);
+                var testRun = ConvertResultToTestRun(resultsSession);
                 var importer = new Importer(uri, username, password, domain);
                 importer.Import(teamProject, testRun);
             }
@@ -356,7 +356,7 @@ namespace SOAtestToMTM
             }
         }
 
-        private static void validateArguments(string[] args)
+        private static void ValidateArguments(string[] args)
         {
             if (args.Length < 6)
             {
@@ -364,7 +364,7 @@ namespace SOAtestToMTM
             }
         }
 
-        public static List<TFSTestRun> convertResultToTestRun(ResultsSession results)
+        public static List<TFSTestRun> ConvertResultToTestRun(ResultsSession results)
         {
             if (results == null)
             {
