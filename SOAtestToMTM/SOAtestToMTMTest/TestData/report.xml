@@ -1,0 +1,229 @@
+<?xml version='1.0' encoding='utf-8'?>
+<ResultsSession buildId="build-2016-08-18 15:17:02" date="08/18/16 15:17:02" project="Default Project" tag="Example Configuration" time="2016-08-18T15:17:02-07:00" toolName="SOAtest" toolVer="9.9.3.20151123">
+   <TestConfig machine="nitrogen" name="Example Configuration" pseudoUrl="soatest.user://Example Configuration" user="kchen" />
+   <Authors>
+      <Author id="dev1" name="kchen" />
+   </Authors>
+   <VersionInfos>
+      <StorageInfo ownerId="com.parasoft.xtest.checkers.api.execution" resultId="IFunctionalTestViolation" ver="3" />
+      <StorageInfo ownerId="com.parasoft.xtest.checkers.api.execution" resultId="ICoverageCalculationResult" ver="1" />
+      <StorageInfo ownerId="com.parasoft.xtest.checkers.api.codereview" resultId="ICodeReviewUndefinedAuthorsInfo" ver="1" />
+      <StorageInfo ownerId="com.parasoft.xtest.checkers.api.codereview" resultId="ICodeReviewScannerInfo" ver="2" />
+      <StorageInfo ownerId="com.parasoft.xtest.checkers.api.scope" resultId="IScopeProjectInfo" ver="3" />
+      <StorageInfo ownerId="com.parasoft.xtest.checkers.api.standards" resultId="IMetricsViolation" ver="2" />
+      <StorageInfo ownerId="com.parasoft.xtest.checkers.api.standards" resultId="IFlowAnalysisViolation" ver="2" />
+      <StorageInfo ownerId="com.parasoft.xtest.checkers.api.standards" resultId="ICodingStandardsViolation" ver="2" />
+      <StorageInfo ownerId="com.parasoft.xtest.checkers.api.standards" resultId="IMetricEstimationInfo" ver="2" />
+      <StorageInfo ownerId="com.parasoft.xtest.checkers.api.standards" resultId="IDupCodeViolation" ver="2" />
+   </VersionInfos>
+   
+   
+      <ExecutedTestsDetails>
+      
+         <Total authChange="0;" authFail="3;" change="0" changePass="0" changeTotal="0" fail="3" name="Passed / Total" pass="13" time="0:00:00.120" total="16">
+         
+            <Project authChange="0;" authFail="3;" change="0" changePass="0" changeTotal="0" fail="3" name="test" pass="13" time="0:00:00.120" total="16">
+            
+               <TestSuite authChange="0;" authFail="3;" change="0" changePass="0" changeTotal="0" fail="3" id="wk:///test/Premera.tst" name="Premera.tst" pass="13" time="0:00:00.120" total="16">
+               
+                  <TestSuite auth="kchen" authChange="0;" authFail="3;" change="0" changePass="0" changeTotal="0" fail="3" id="wk:///test/Premera.tst#0000000000" name="Test Suite: Test Suite" pass="13" root="true" time="0:00:00.120" total="16">
+                  
+                     <TestSuite auth="kchen" authChange="0;" authFail="1;" change="0" changePass="0" changeTotal="0" fail="1" id="wk:///test/Premera.tst#0000000000#0000000002" name="Test Suite: Test Suite A" pass="2" time="0:00:00.026" total="3">
+                     
+                        <Test auth="kchen" authChange="0;" authFail="1;" change="0" changePass="0" changeTotal="0" fail="1" id="wk:///test/Premera.tst#0000000000#0000000002#0000000006" name="Test 1: Test A" pass="0" startTime="1471558622262" time="0:00:00.015" tool="Test A" total="1">
+                        
+                           <assoc id="308" tag="pr" />
+                        
+                           <assoc id="303" tag="req" />
+                     
+                        </Test>
+                     
+                        <Test auth="kchen" authChange="0;" authFail="0;" change="0" changePass="0" changeTotal="0" fail="0" id="wk:///test/Premera.tst#0000000000#0000000002#0000000007" name="Test 2: Test B" pass="1" startTime="1471558622279" time="0:00:00.005" tool="Test B" total="1">
+                        
+                           <assoc id="309" tag="pr" />
+                        
+                           <assoc id="303" tag="req" />
+                     
+                        </Test>
+                     
+                        <Test auth="kchen" authChange="0;" authFail="0;" change="0" changePass="0" changeTotal="0" fail="0" id="wk:///test/Premera.tst#0000000000#0000000002#0000000008" name="Test 3: Test C" pass="1" startTime="1471558622287" time="0:00:00.006" tool="Test C" total="1">
+                        
+                           <assoc id="310" tag="pr" />
+                        
+                           <assoc id="303" tag="req" />
+                     
+                        </Test>
+                  
+                     </TestSuite>
+                  
+                     <TestSuite auth="kchen" authChange="0;" authFail="2;" change="0" changePass="0" changeTotal="0" fail="2" id="wk:///test/Premera.tst#0000000000#0000000004" name="Test Suite: Test Suite B" pass="7" time="0:00:00.072" total="9">
+                     
+                        <Test auth="kchen" authChange="0;" authFail="1;" change="0" changePass="0" changeTotal="0" fail="1" id="wk:///test/Premera.tst#0000000000#0000000004#0000000009" name="Test 1: Test X" pass="0" startTime="1471558622297" time="0:00:00.014" tool="Test X" total="1">
+                        
+                           <assoc id="311" tag="pr" />
+                        
+                           <assoc id="303" tag="req" />
+                     
+                        </Test>
+                     
+                        <Test auth="kchen" authChange="0;" authFail="0;" change="0" changePass="0" changeTotal="0" fail="0" id="wk:///test/Premera.tst#0000000000#0000000004#0000000010" name="Test 2: Test Y" pass="1" startTime="1471558622312" time="0:00:00.005" tool="Test Y" total="1">
+                        
+                           <assoc id="312" tag="pr" />
+                        
+                           <assoc id="303" tag="req" />
+                     
+                        </Test>
+                     
+                        <Test auth="kchen" authChange="0;" authFail="0;" change="0" changePass="0" changeTotal="0" fail="0" id="wk:///test/Premera.tst#0000000000#0000000004#0000000011" name="Test 3: Test Z" pass="1" startTime="1471558622319" time="0:00:00.005" tool="Test Z" total="1">
+                        
+                           <assoc id="313" tag="pr" />
+                        
+                           <assoc id="303" tag="req" />
+                     
+                        </Test>
+                     
+                        <TestSuite auth="kchen" authChange="0;" authFail="1;" change="0" changePass="0" changeTotal="0" fail="1" id="wk:///test/Premera.tst#0000000000#0000000004#0000000018" name="Test Suite: Test Something 2" pass="5" time="0:00:00.048" total="6">
+                        
+                           <Test auth="kchen" authChange="0;" authFail="0;" change="0" changePass="0" changeTotal="0" fail="0" id="wk:///test/Premera.tst#0000000000#0000000004#0000000018#0000000019" name="Test 1: Step #1" pass="1" startTime="1471558622329" time="0:00:00.006" tool="Step #1" total="1">
+                           
+                              <assoc id="314" tag="pr" />
+                           
+                              <assoc id="303" tag="req" />
+                        
+                           </Test>
+                        
+                           <Test auth="kchen" authChange="0;" authFail="0;" change="0" changePass="0" changeTotal="0" fail="0" id="wk:///test/Premera.tst#0000000000#0000000004#0000000018#0000000020" name="Test 2: Step #2" pass="1" startTime="1471558622337" time="0:00:00.006" tool="Step #2" total="1">
+                           
+                              <assoc id="314" tag="pr" />
+                           
+                              <assoc id="303" tag="req" />
+                        
+                           </Test>
+                        
+                           <Test auth="kchen" authChange="0;" authFail="0;" change="0" changePass="0" changeTotal="0" fail="0" id="wk:///test/Premera.tst#0000000000#0000000004#0000000018#0000000021" name="Test 3: Step #3" pass="1" startTime="1471558622345" time="0:00:00.006" tool="Step #3" total="1">
+                           
+                              <assoc id="314" tag="pr" />
+                           
+                              <assoc id="303" tag="req" />
+                        
+                           </Test>
+                        
+                           <TestSuite auth="kchen" authChange="0;" authFail="1;" change="0" changePass="0" changeTotal="0" fail="1" id="wk:///test/Premera.tst#0000000000#0000000004#0000000018#0000000022" name="Test Suite: Test Suite A 2" pass="2" time="0:00:00.030" total="3">
+                           
+                              <Test auth="kchen" authChange="0;" authFail="1;" change="0" changePass="0" changeTotal="0" fail="1" id="wk:///test/Premera.tst#0000000000#0000000004#0000000018#0000000022#0000000023" name="Test 1: Test A" pass="0" startTime="1471558622353" time="0:00:00.016" tool="Test A" total="1">
+                              
+                                 <assoc id="308" tag="pr" />
+                              
+                                 <assoc id="314" tag="pr" />
+                              
+                                 <assoc id="303" tag="req" />
+                           
+                              </Test>
+                           
+                              <Test auth="kchen" authChange="0;" authFail="0;" change="0" changePass="0" changeTotal="0" fail="0" id="wk:///test/Premera.tst#0000000000#0000000004#0000000018#0000000022#0000000024" name="Test 2: Test B" pass="1" startTime="1471558622372" time="0:00:00.007" tool="Test B" total="1">
+                              
+                                 <assoc id="309" tag="pr" />
+                              
+                                 <assoc id="314" tag="pr" />
+                              
+                                 <assoc id="303" tag="req" />
+                           
+                              </Test>
+                           
+                              <Test auth="kchen" authChange="0;" authFail="0;" change="0" changePass="0" changeTotal="0" fail="0" id="wk:///test/Premera.tst#0000000000#0000000004#0000000018#0000000022#0000000025" name="Test 3: Test C" pass="1" startTime="1471558622381" time="0:00:00.007" tool="Test C" total="1">
+                              
+                                 <assoc id="310" tag="pr" />
+                              
+                                 <assoc id="314" tag="pr" />
+                              
+                                 <assoc id="303" tag="req" />
+                           
+                              </Test>
+                        
+                           </TestSuite>
+                     
+                        </TestSuite>
+                  
+                     </TestSuite>
+                  
+                     <TestSuite auth="kchen" authChange="0;" authFail="0;" change="0" changePass="0" changeTotal="0" fail="0" id="wk:///test/Premera.tst#0000000000#0000000005" name="Test Suite: Test Something" pass="3" time="0:00:00.016" total="3">
+                     
+                        <Test auth="kchen" authChange="0;" authFail="0;" change="0" changePass="0" changeTotal="0" fail="0" id="wk:///test/Premera.tst#0000000000#0000000005#0000000012" name="Test 1: Step #1" pass="1" startTime="1471558622393" time="0:00:00.005" tool="Step #1" total="1">
+                        
+                           <assoc id="314" tag="pr" />
+                        
+                           <assoc id="303" tag="req" />
+                     
+                        </Test>
+                     
+                        <Test auth="kchen" authChange="0;" authFail="0;" change="0" changePass="0" changeTotal="0" fail="0" id="wk:///test/Premera.tst#0000000000#0000000005#0000000013" name="Test 2: Step #2" pass="1" startTime="1471558622401" time="0:00:00.006" tool="Step #2" total="1">
+                        
+                           <assoc id="314" tag="pr" />
+                        
+                           <assoc id="303" tag="req" />
+                     
+                        </Test>
+                     
+                        <Test auth="kchen" authChange="0;" authFail="0;" change="0" changePass="0" changeTotal="0" fail="0" id="wk:///test/Premera.tst#0000000000#0000000005#0000000014" name="Test 3: Step #3" pass="1" startTime="1471558622408" time="0:00:00.005" tool="Step #3" total="1">
+                        
+                           <assoc id="314" tag="pr" />
+                        
+                           <assoc id="303" tag="req" />
+                     
+                        </Test>
+                  
+                     </TestSuite>
+                  
+                     <Test auth="kchen" authChange="0;" authFail="0;" change="0" changePass="0" changeTotal="0" fail="0" id="wk:///test/Premera.tst#0000000000#0000000017" name="Test 4: Step #1" pass="1" startTime="1471558622414" time="0:00:00.006" tool="Step #1" total="1">
+                     
+                        <assoc id="303" tag="req" />
+                  
+                     </Test>
+               
+                  </TestSuite>
+            
+               </TestSuite>
+         
+            </Project>
+      
+         </Total>
+   
+      </ExecutedTestsDetails>
+   
+   <Scope>
+      <ProjectInformations>
+         <ScopeProjectInfo fltFiles="1" fltLns="0" project="/test" totFiles="1" totLns="0" />
+      </ProjectInformations>
+   </Scope>
+   <FunctionalTests ownerId="com.parasoft.xtest.checkers.api.execution" time="0:00:00">
+      <Goals>
+         <Goal mode="1" name="Functional Test Violations" type="4" />
+         <Goal mode="1" name="Runtime Error Detection Violations" type="5" />
+      </Goals>
+        
+  <FuncViols>
+    <FuncViol sev="1" ln="-1" cat="11" tool="soatest" taskType="Miscellaneous Errors" requestTrafficBody="test" lang="web" requestTrafficMIMEType="text/xml" config="1" responseTrafficBody="" chainedToolId="" hash="1203033449" urgent="true" fatal="false" responseTrafficMIMEType="text/xml" locType="sr" responseTrafficHeaders="" violationDetails="" msg="Expected timeout, but test completed within 30000 milliseconds." testCaseId="wk:///test/Premera.tst#0000000000#0000000002#0000000006" requestTrafficHeaders="" auth="kchen" locFile="/test/Premera.tst" />
+    <FuncViol sev="1" ln="-1" cat="11" tool="soatest" taskType="Miscellaneous Errors" requestTrafficBody="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?>&lt;/>" lang="web" requestTrafficMIMEType="text/xml" config="1" responseTrafficBody="" chainedToolId="" hash="1203033449" urgent="true" fatal="false" responseTrafficMIMEType="text/xml" locType="sr" responseTrafficHeaders="" violationDetails="" msg="Expected timeout, but test completed within 30000 milliseconds." testCaseId="wk:///test/Premera.tst#0000000000#0000000004#0000000009" requestTrafficHeaders="" auth="kchen" locFile="/test/Premera.tst" />
+    <FuncViol sev="1" ln="-1" cat="11" tool="soatest" taskType="Miscellaneous Errors" requestTrafficBody="test" lang="web" requestTrafficMIMEType="text/xml" config="1" responseTrafficBody="" chainedToolId="" hash="1203033449" urgent="true" fatal="false" responseTrafficMIMEType="text/xml" locType="sr" responseTrafficHeaders="" violationDetails="" msg="Expected timeout, but test completed within 30000 milliseconds." testCaseId="wk:///test/Premera.tst#0000000000#0000000004#0000000018#0000000022#0000000023" requestTrafficHeaders="" auth="kchen" locFile="/test/Premera.tst" />
+  </FuncViols>
+
+      
+      <Categories>
+         <Category desc="" id="4" label="Fix Functional Test Violations" label0="Fix Functional Test" label1="Violations" name="Functional Test Violations">
+            <SubCategory id="8" name="Functional Failures" short="functional failure" />
+            <SubCategory id="10" name="XML Validation Errors" short="XML validation error" />
+            <SubCategory id="11" name="Miscellaneous Errors" short="miscellaneous error" />
+         </Category>
+         <Category desc="" id="6" label="Review Change Impact" label0="Review" label1="Change Impact" name="Change Impact">
+            <SubCategory id="16" name="Change Impact" short="change impact" />
+         </Category>
+      </Categories>
+   </FunctionalTests>
+   <AssocUrls>
+      <Tag disp="Asset" name="asset" />
+      <Tag disp="Task" name="task" />
+      <Tag disp="Feature request" name="fr" />
+      <Tag disp="Requirement" name="req" />
+      <Tag disp="Problem report" name="pr" />
+   </AssocUrls>
+</ResultsSession>
