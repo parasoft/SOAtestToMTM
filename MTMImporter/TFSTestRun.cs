@@ -9,85 +9,16 @@ namespace SOAtestToMTM
 {
     public class TFSTestRun
     {
-        private int testPlanId;
-
-        public int TestPlanId
-        {
-            get { return testPlanId; }
-            set { testPlanId = value; }
-        }
-
-        private string configurationName;
-
-        public string ConfigurationName
-        {
-            get { return configurationName; }
-            set { configurationName = value; }
-        }
-
-        private string title;
-
-        public string Title
-        {
-            get { return title; }
-            set { title = value; }
-        }
-
-        private System.DateTime dateStarted;
-
-        public System.DateTime DateStarted
-        {
-            get { return dateStarted; }
-            set { dateStarted = value; }
-        }
-
-        private System.DateTime dateCompleted;
-
-        public System.DateTime DateCompleted
-        {
-            get { return dateCompleted; }
-            set { dateCompleted = value; }
-        }
-
-        private string comment;
-
-        public string Comment
-        {
-            get { return comment; }
-            set { comment = value; }
-        }
-
-        private string testEnvironment;
-
-        public string TestEnvironment
-        {
-            get { return testEnvironment; }
-            set { testEnvironment = value; }
-        }
-
-        private string buildNumber;
-
-        public string BuildNumber
-        {
-            get { return buildNumber; }
-            set { buildNumber = value; }
-        }
-
-        private string ownerName;
-
-        public string OwnerName
-        {
-            get { return ownerName; }
-            set { ownerName = value; }
-        }
-
-        private Dictionary<int, TFSTestCase> testCases;
-
-        public Dictionary<int, TFSTestCase> TestCases
-        {
-            get { return testCases; }
-            set { testCases = value; }
-        }
+        public int TestPlanId { get; set; }
+        public string ConfigurationName { get; set; }
+        public string Title { get; set; }
+        public System.DateTime DateStarted { get; set; }
+        public System.DateTime DateCompleted { get; set; }
+        public string Comment { get; set; }
+        public string TestEnvironment { get; set; }
+        public string BuildNumber { get; set; }
+        public string OwnerName { get; set; }
+        public Dictionary<int, TFSTestCase> TestCases { get; set; }
 
         /// <summary>
         /// Add a test step to existing test case, and update its status/time
@@ -96,14 +27,14 @@ namespace SOAtestToMTM
         /// <param name="test">ResultsSession Test</param>
         public void AddTestCase(int testCaseId, Test test)
         {
-            if (testCases == null)
+            if (TestCases == null)
             {
-                testCases = new Dictionary<int, TFSTestCase>();
+                TestCases = new Dictionary<int, TFSTestCase>();
             }
 
             TFSTestCase testCase = null;
             DateTime endTime = test.StartTime.Add(test.Time);
-            if (!testCases.TryGetValue(testCaseId, out testCase))
+            if (!TestCases.TryGetValue(testCaseId, out testCase))
             {
                 testCase = new TFSTestCase();
                 testCase.Status = test.Status;
@@ -143,7 +74,7 @@ namespace SOAtestToMTM
                         break;
                 }
                 testCase.Comment = sb.ToString();
-                testCases.Add(testCase.TestCaseId, testCase);
+                TestCases.Add(testCase.TestCaseId, testCase);
             }
             else
             {
@@ -162,14 +93,14 @@ namespace SOAtestToMTM
                     testCase.DateCompleted = endTime;
                 }
 
-                if (DateTime.Compare(dateStarted, test.StartTime) > 0)
+                if (DateTime.Compare(DateStarted, test.StartTime) > 0)
                 {
-                    dateStarted = test.StartTime;
+                    DateStarted = test.StartTime;
                 }
 
-                if (DateTime.Compare(dateCompleted, endTime) < 0)
+                if (DateTime.Compare(DateCompleted, endTime) < 0)
                 {
-                    dateCompleted = endTime;
+                    DateCompleted = endTime;
                 }
 
             }
@@ -180,56 +111,16 @@ namespace SOAtestToMTM
 
     public class TFSTestCase
     {
-        private int testCaseId;
-
-        public int TestCaseId
-        {
-            get { return testCaseId; }
-            set { testCaseId = value; }
-        }
-
-        private DateTime dateStarted;
-
-        public DateTime DateStarted
-        {
-            get { return dateStarted; }
-            set { dateStarted = value; }
-        }
-
-        private DateTime dateCompleted;
-
-        public DateTime DateCompleted
-        {
-            get { return dateCompleted; }
-            set { dateCompleted = value; }
-        }
-
-        private int status;
-
-        public int Status
-        {
-            get { return status; }
-            set { status = value; }
-        }
-
-        private string errorMessage;
-
-        public string ErrorMessage
-        {
-            get { return errorMessage; }
-            set { errorMessage = value; }
-        }
-
+        public int TestCaseId { get; set; }
+        public DateTime DateStarted { get; set; }
+        public DateTime DateCompleted { get; set; }
+        public int Status { get; set; }
+        public string ErrorMessage { get; set; }
         public string Comment { get; set; }
-
         public int? Priority { get; set; }
-
         public string OwnerName { get; set; }
-
         public string RunByName { get; set; }
-
         public string FailureType { get; set; }
-
         public string ResolutionState { get; set; }
     }
 
