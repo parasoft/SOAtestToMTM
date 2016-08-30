@@ -72,24 +72,31 @@ Test Plan with id 3
 
 ### Visual Studio
 * Open the SOAtestToMTM solution in Visual Studio
-* Update the missing Nuget Dependencies
+* Update the missing Nuget Dependencies by enabling Nuget Restore 
 * Build the Solution
 
 ### Command Line
-TBA
+* Update missing Nuget Dependencies with nuget.exe install SOAtestToMTMT/MTMImporter/packages.config
+* In VS Developer Command Prompt, build solution with msbuild SOAtestToMTM.sln
 
 ## How to Run
-The MTM Importer executable requires the uri to Team Foundation Server and the valid credentials. A valid project name is also required to import SOAtest Result.
-In a command prompt, run the MTM Importer executable with the following arguments:
-```
-MTMImporter.exe <TFS uri> <TFS username> <TFS password> <TFS domain> <TFS Project> <path to SOAtest report.xml>
-```
+Running MTMImporter.exe with --help will show the required parameters:
+![Help](/images/help.jpg)
 
-When the import is completed without error, the following message will be displayed:
+This importer example also includes a simple ciphter to encrypt passwords.
+
+'''
+
+ MTMImporter.exe --encrypt 'password'
+ 8oT4LZP6D3g2aord/gkXmR/Myfw/1M4F
+
+'''
+
+Example command line:
 
 ```
-C:\Example>MTMImporter.exe http://tfs2013.parasoft.com:8080/tfs/DefaultCollection username password PARASOFT "Project A" "C:\Report\report.xml"
-Import completed
+ C:\Example>MTMImporter.exe --uri http://tfs2013.parasoft.com:8080/tfs/DefaultCollection --username user --password pass --domain PARASOFT -- project "Project A" --report "C:\Report\report.xml"
+
 ```
 
 
