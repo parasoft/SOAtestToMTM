@@ -85,17 +85,18 @@ Running MTMImporter.exe with --help will show the required parameters:
 
 This importer example also includes a simple ciphter to encrypt passwords.
 
-'''
+```
 
  MTMImporter.exe --encrypt 'password'
  8oT4LZP6D3g2aord/gkXmR/Myfw/1M4F
 
-'''
+```
 
 Example command line:
 
 ```
- C:\Example>MTMImporter.exe --uri http://tfs2013.parasoft.com:8080/tfs/DefaultCollection --username user --password pass --domain PARASOFT -- project "Project A" --report "C:\Report\report.xml"
+ C:\Example>MTMImporter.exe --uri http://tfs2013.parasoft.com:8080/tfs/DefaultCollection --username user --password pass 
+ --domain PARASOFT -- project "Project A" --report "C:\Report\report.xml"
 
 ```
 
