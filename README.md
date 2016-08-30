@@ -19,18 +19,35 @@ SOAtest and MTM must be set up with the approprate assocation structure.
 ###### Disclaimer
 SOAtest report formats may updated be in future updates of SOAtest. If so, report parsing will need to be adjusted.
 
-### SOAtest
+### MTM Set Up
+
+MTM must have test plans set up correctly for the importer to able to associate the tests.
+
+User must know the test plan id and its test ids before configuring SOAtest. If there are no test plans exist in the project, please follow MTM documentaion on how to add test plan/test case.
+
+The test plan id can be found in MTM Test Center or using the web client.
+![Test Center](/images/testcenter.jpg)
+
+![Web Client](/images/webclient.jpg)
+
+Test Case id can be found by drilling down into each test suite within the test plan, Test Suite ids will not be used by the importer.
+
+![Tests](/images/test.jpg)
+
+![Web Client Tests](/images/webtest.jpg)
+
+### SOAtest Set Up
 In SOAtest, configure the .tst's root Test Suite with the requirement information that corresponds to the MTM Test Plan structure.
 
 ![SOAtest Screenshot](/images/requirement.jpg)
 
 In each test suite's Requirement and Notes tab, add the association for each test. The association added for each Test Suite will be inherited by its children.
 
-@req represents a Test Run
+@req represents a Test Plan
 @pr represents a Test Case
 
 The test results are correlated using the following logic:
-Each test run (associated with @req) can contain multiple test cases (associated with @pr). Each individual SOAtest test result is  considered to be a test case step.
+Each test plan (associated with @req) can contain multiple test cases (associated with @pr). Each individual SOAtest test result is considered to be a test case step.
 
 ```
 Example.tst
@@ -44,19 +61,12 @@ Example.tst
 will be translated into this in TFS
 
 ```
-TestPlan
- ---Test Run with id 1
+TestPlan with id 1
   ---Test Case with id 2
      ---two test steps
- ---Test Run with id 3
+Test Plan with id 3
   ---Test Case with id 4
 ```
-
-
-### MTM
-Same structure in MTM
-![MTM Screenshot](/images/mtm.jpg)
-
 
 ## How to Build
 

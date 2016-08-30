@@ -16,5 +16,15 @@ namespace SOAtestToMTM
             Assert.AreEqual(testRuns.Count, 1);
 
         }
+
+        [TestMethod]
+        public void TestSimpleCipher()
+        {
+            string password = "password";
+            string encrypted = SimpleCipher.Encrypt(password);
+            Assert.AreEqual(password, SimpleCipher.Decrypt(encrypted));
+
+        }
+
     }
 }
