@@ -246,6 +246,7 @@
     <Compile Include="Importer.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimpleCipher.cs" />
     <Compile Include="TFSTestRun.cs" />
   </ItemGroup>
   <ItemGroup>

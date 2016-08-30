@@ -10,12 +10,11 @@ namespace SOAtestToMTM
         [TestMethod]
         public void TestImporterConvertToTestRun()
         {
-            Parser parser = new Parser();
             string filePath = @"..\..\TestData\report.xml";
-            ResultsSession rs = parser.Parse(filePath);
+            ResultsSession rs = Parser.Parse(filePath);
             List<TFSTestRun> testRuns = Importer.ConvertResultToTestRun(rs);
             Assert.AreEqual(testRuns.Count, 1);
-            
+
         }
     }
 }
