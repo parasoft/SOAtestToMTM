@@ -21,16 +21,16 @@ SOAtest report formats may updated be in future updates of SOAtest. If so, repor
 
 ### MTM Set Up
 
-MTM must have test plans set up correctly for the importer to able to associate the tests.
+MTM test plans must be set up correctly for the importer to able to associate the tests.
 
-User must know the test plan id and its test ids before configuring SOAtest. If there are no test plans exist in the project, please follow MTM documentaion on how to add test plan/test case.
+You need to know the Test Plan ID and its Test IDs before configuring SOAtest. If the project doesn't have any test plans yet,  follow  the MTM documentation's instructions on how to add test plans/test cases.
 
-The test plan id can be found in MTM Test Center or using the web client.
+The Test Plan ID can be found in MTM Test Center or using the web client.
 ![Test Center](/images/testcenter.jpg)
 
 ![Web Client](/images/webclient.jpg)
 
-Test Case id can be found by drilling down into each test suite within the test plan, Test Suite ids will not be used by the importer.
+The Test Case ID can be found by drilling down into each test suite within the test plan, Test Suite ids will not be used by the importer.
 
 ![Tests](/images/test.jpg)
 
@@ -76,14 +76,14 @@ Test Plan with id 3
 * Build the Solution
 
 ### Command Line
-* Update missing Nuget Dependencies with nuget.exe install SOAtestToMTMT/MTMImporter/packages.config
-* In VS Developer Command Prompt, build solution with msbuild SOAtestToMTM.sln
+* Update the missing Nuget Dependencies with nuget.exe install SOAtestToMTMT/MTMImporter/packages.config
+* In the VS Developer Command Prompt, build the solution with msbuild SOAtestToMTM.sln
 
 ## How to Run
 Running MTMImporter.exe with --help will show the required parameters:
 ![Help](/images/help.jpg)
 
-This importer example also includes a simple ciphter to encrypt passwords.
+This importer example also includes a simple cipher to encrypt passwords.
 
 ```
  MTMImporter.exe --encrypt 'password'
@@ -103,55 +103,55 @@ Example command line:
 ### Overview
 Report.xml contains a lot of information; here, we will focus only on several key elements.
 
-Our example uses XMLReader for the sake of simplicity and efficiencys. It expects elements in the following order (default order):
+Our example uses XMLReader for the sake of simplicity and efficiency. It expects elements in the following order (default order):
 
-1. `ResultsSession` root element and its attributes to get general information for the test run, such as project, session tag, test start time and build number.
+1. `ResultsSession` root element and its attributes to get general test run information, such as project, session tag, test start time and build number.
 2. `TestConfig` element for the configuration and user.
-3. `ExecutedTestsDetails` element and its children to gather test result
+3. `ExecutedTestsDetails` element and its children to gather test results.
 4. `FuncViols` element for test failures.
 
 ##### ResultsSession
 ResultsSession is the root element in SOAtest report.xml. The following attributes will be used to populate information for a MTM Test Run.
-* `buildId`: For build number
-* `project`: For project name
-* `tag`: For test environment. Note that tag is a user-defined field ("Session Tag" in SOAtest). It can be used to group multiple reports-- in this case, a test environment
-* `time`: For time start time 
+* `buildId`: For build number.
+* `project`: For project name.
+* `tag`: For test environment. Note that tag is a user-defined field ("Session Tag" in SOAtest). It can be used to group multiple reports-- in this case, we group by test environment.
+* `time`: For time start time.
 
 ##### TestConfig
-`TestConfig` is the first child element in `ResultsSession`
-* `name`: For Configuration name
-* `user`: For the test run user
+`TestConfig` is the first child element in `ResultsSession`.
+* `name`: For the Configuration name.
+* `user`: For the test run user.
 
 
 ##### ExecutedTestsDetails
 `ExecutedTestsDetails` is the next element that will be parsed. It contains multiple levels that eventually traverse down to 'Test' elements that contain the results of each individual test.
-Test results are collected in the parent `TestSuite`, which can be self nested. 
+Test results are collected in the parent `TestSuite`, which can be self-nested. 
 The hierarchy is represented as:  `ExecutedTestsDetails` --> `Total` --> `Project` (tst files) --> nesting `TestSuites` --> `Test`
 The attributes used in `Test` elements are:
-* `id`: For mapping test failure messages later
-* `fail`: With value > 0, indicates that the test failed
-* `pass`: With value > 0, indicates that the test passed
-* `startTime`: The time (in ms) that the test started
-* `time` The duration of the test (from start until completion)
+* `id`: For mapping test failure messages later.
+* `fail`: With value > 0, indicates that the test failed.
+* `pass`: With value > 0, indicates that the test passed.
+* `startTime`: The time (in ms) that the test started.
+* `time` The duration of the test (from start until completion).
 
 ##### assoc
-`assoc`: Assoc elements are children of `Test`. They contain the requirement associations that user has specified in each test suite.
-* `tag`: The association tag used to determine if the test associated to a Test Run "req" or a Test Case "pr"
-* `id`: The corresponding id of the Test Run or Test Case in TFS
+`assoc`: Assoc elements are children of `Test`. They contain the requirement associations that were specified in each test suite.
+* `tag`: The association tag used to determine if the test is associated with a Test Run "req" or a Test Case "pr".
+* `id`: The corresponding id of the Test Run or Test Case in TFS.
 
 #### FuncViols
 `FuncViols`: A list of `FuncViol` that contains the following attributes:
-* `sev`: The severity of the test result (1 is the highest)
-* `taskType`: The type the failure; typical values are "Miscellaneous Errors"
-* `msg`: The failure message, which can be added as a comment to the Test Case
-* `testCaseId`: The id of the test case that caused this failure
+* `sev`: The severity of the test result (1 is the highest).
+* `taskType`: The type the failure; typical values are "Miscellaneous Errors".
+* `msg`: The failure message, which can be added as a comment to the Test Case.
+* `testCaseId`: The id of the test case that caused this failure.
 
 ## Importing results into MTM
 
 The `MTMImporter` project uses the [Team Foundation Server API](https://msdn.microsoft.com/en-us/library/bb130146(v=vs.120).aspx) to construct results for Test Plans.
-It re-maps the parsed ResultSession object into a a list of `TFSTestRun` and create run results in MTM.
-The test results are re-arranged in the logic mentioned in the prerequisites:
-In each test run (associated with @req) can contain multiple test cases (associated with @pr), each indivdual test results in SOAtest are considered as steps for each test case.
+It re-maps the parsed ResultSession object into a list of `TFSTestRun` and creates run results in MTM.
+The test results are re-arranged according to the logic mentioned in the prerequisites:
+Each test run (associated with @req) can contain multiple test cases (associated with @pr). Each indivdual test result in SOAtest is considered to be a test case step.
 
 
 
