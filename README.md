@@ -86,18 +86,15 @@ Running MTMImporter.exe with --help will show the required parameters:
 This importer example also includes a simple ciphter to encrypt passwords.
 
 ```
-
  MTMImporter.exe --encrypt 'password'
  8oT4LZP6D3g2aord/gkXmR/Myfw/1M4F
-
 ```
 
 Example command line:
 
 ```
- C:\Example>MTMImporter.exe --uri http://tfs2013.parasoft.com:8080/tfs/DefaultCollection --username user --password pass 
- --domain PARASOFT -- project "Project A" --report "C:\Report\report.xml"
-
+ C:\Example>MTMImporter.exe --uri http://tfs2013.parasoft.com:8080/tfs/DefaultCollection --username user 
+ --password pass --domain PARASOFT -- project "Project A" --report "C:\Report\report.xml"
 ```
 
 
@@ -179,12 +176,12 @@ https://raw.githubusercontent.com/JamesNK/Newtonsoft.Json/master/LICENSE.md
 
 Microsoft Visual Studio Services Client
 Microsoft Corporation
-version 14.89.0
+Version 14.89.0
 https://www.microsoft.com/net/dotnet_library_license.htm
 
 Microsoft Visual Studio Services Client (Interactive)
 Microsoft Corporation
-version 14.89.0
+Version 14.89.0
 https://www.microsoft.com/net/dotnet_library_license.htm
 
 Miscrosoft ASP.NET Web API 2.2 Client Libraries
@@ -209,10 +206,15 @@ https://raw.githubusercontent.com/WindowsAzure/azure-sdk-for-net/master/LICENSE.
 
 Microsoft Team Foundation Server Client
 Microsoft Corporation
-version 14.89.0
+Version 14.89.0
 https://www.microsoft.com/net/dotnet_library_license.htm
 
 Microsoft Team Foundation Server Extended Client
 Microsoft Corporation
-version 14.89.0
+Version 14.89.0
 https://www.microsoft.com/net/dotnet_library_license.htm
+
+Command Line Parser Library
+Giacomo Stelluti Scala
+Version 1.9.71
+https://github.com/gsscoder/commandline/blob/master/License.md
