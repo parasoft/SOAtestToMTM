@@ -14,7 +14,7 @@ This example supports
 * Team Foundation Sever 2013 or above
 * Visual Studio 2013 or above
 
-SOAtest and MTM must be set up with the approprate assocation structure.
+SOAtest and MTM must be set up with the appropriate association structure.
 
 ###### Disclaimer
 SOAtest report formats may updated be in future updates of SOAtest. If so, report parsing will need to be adjusted.
@@ -23,14 +23,14 @@ SOAtest report formats may updated be in future updates of SOAtest. If so, repor
 
 MTM must have test plans set up correctly for the importer to able to associate the tests.
 
-User must know the test plan id and its test ids before configuring SOAtest. If there are no test plans exist in the project, please follow MTM documentaion on how to add test plan/test case.
+User must know the test plan id and its test ids before configuring SOAtest. If there are no test plans in the project yet, please follow MTM documentation on how to add test plans/test cases.
 
-The test plan id can be found in MTM Test Center or using the web client.
+The Test Plan ID can be found in MTM Test Center or using the web client.
 ![Test Center](/images/testcenter.jpg)
 
 ![Web Client](/images/webclient.jpg)
 
-Test Case id can be found by drilling down into each test suite within the test plan, Test Suite ids will not be used by the importer.
+The Test Case ID can be found by drilling down into each test suite within the test plan. Test Suite IDs will not be used by the importer.
 
 ![Tests](/images/test.jpg)
 
@@ -83,7 +83,7 @@ Test Plan with id 3
 Running MTMImporter.exe with --help will show the required parameters:
 ![Help](/images/help.jpg)
 
-This importer example also includes a simple ciphter to encrypt passwords.
+This importer example also includes a simple cipher to encrypt passwords.
 
 ```
  MTMImporter.exe --encrypt 'password'
