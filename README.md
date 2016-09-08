@@ -14,7 +14,7 @@ This example supports
 * Team Foundation Sever 2013 or above
 * Visual Studio 2013 or above
 
-SOAtest and MTM must be set up with the approprate assocation structure.
+SOAtest and MTM must be set up with the appropriate association structure.
 
 ###### Disclaimer
 SOAtest report formats may updated be in future updates of SOAtest. If so, report parsing will need to be adjusted.
@@ -23,14 +23,14 @@ SOAtest report formats may updated be in future updates of SOAtest. If so, repor
 
 MTM test plans must be set up correctly for the importer to able to associate the tests.
 
-You need to know the Test Plan ID and its Test IDs before configuring SOAtest. If the project doesn't have any test plans yet,  follow  the MTM documentation's instructions on how to add test plans/test cases.
+User must know the test plan id and its test ids before configuring SOAtest. If there are no test plans in the project yet, please follow MTM documentation on how to add test plans/test cases.
 
 The Test Plan ID can be found in MTM Test Center or using the web client.
 ![Test Center](/images/testcenter.jpg)
 
 ![Web Client](/images/webclient.jpg)
 
-The Test Case ID can be found by drilling down into each test suite within the test plan, Test Suite ids will not be used by the importer.
+The Test Case ID can be found by drilling down into each test suite within the test plan. Test Suite IDs will not be used by the importer.
 
 ![Tests](/images/test.jpg)
 
