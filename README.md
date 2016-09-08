@@ -30,7 +30,7 @@ The Test Plan ID can be found in MTM Test Center or using the web client.
 
 ![Web Client](/images/webclient.jpg)
 
-The Test Case ID can be found by drilling down into each test suite within the test plan. Test Suite IDs will not be used by the importer.
+The Test Case ID can be found by drilling down into each test suite within the test plan, Test Suite ids will not be used by the importer.
 
 ![Tests](/images/test.jpg)
 

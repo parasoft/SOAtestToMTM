@@ -22,7 +22,7 @@ namespace SOAtestToMTM
         {
             string password = "password";
             string encrypted = SimpleCipher.Encrypt(password);
-            Assert.AreEqual(password, SimpleCipher.Decrypt(encrypted));
+            Assert.AreEqual(password, SimpleCipher.TryDecrypt(encrypted));
 
         }
 

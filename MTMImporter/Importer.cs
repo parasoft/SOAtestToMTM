@@ -320,7 +320,7 @@ namespace SOAtestToMTM
         {
             try
             {
-                bool isEncrypt = args.Length == 2 && args[0] == "--encrypt";
+                bool isEncrypt = args.Length == 2 && args[0] == "--encodePass";
                 if (isEncrypt)
                 {
                     Console.WriteLine(SimpleCipher.Encrypt(args[1]));
@@ -333,7 +333,7 @@ namespace SOAtestToMTM
                         Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
                     }
 
-                    var password = SimpleCipher.Decrypt(options.Password);
+                    var password = SimpleCipher.TryDecrypt(options.Password);
                     var resultsSession = Parser.Parse(options.Report);
                     var testRun = ConvertResultToTestRun(resultsSession);
                     var importer = new Importer(options.URI, options.Username, password, options.Domain);
