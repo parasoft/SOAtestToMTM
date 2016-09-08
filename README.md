@@ -14,23 +14,40 @@ This example supports
 * Team Foundation Sever 2013 or above
 * Visual Studio 2013 or above
 
-SOAtest and MTM must be set up with the approprate assocation structure.
+SOAtest and MTM must be set up with the appropriate association structure.
 
 ###### Disclaimer
 SOAtest report formats may updated be in future updates of SOAtest. If so, report parsing will need to be adjusted.
 
-### SOAtest
+### MTM Set Up
+
+MTM test plans must be set up correctly for the importer to able to associate the tests.
+
+User must know the test plan id and its test ids before configuring SOAtest. If there are no test plans in the project yet, please follow MTM documentation on how to add test plans/test cases.
+
+The Test Plan ID can be found in MTM Test Center or using the web client.
+![Test Center](/images/testcenter.jpg)
+
+![Web Client](/images/webclient.jpg)
+
+The Test Case ID can be found by drilling down into each test suite within the test plan, Test Suite ids will not be used by the importer.
+
+![Tests](/images/test.jpg)
+
+![Web Client Tests](/images/webtest.jpg)
+
+### SOAtest Set Up
 In SOAtest, configure the .tst's root Test Suite with the requirement information that corresponds to the MTM Test Plan structure.
 
-![SOAtest Screenshot](/SOAtestToMTM/images/requirement.jpg)
+![SOAtest Screenshot](/images/requirement.jpg)
 
 In each test suite's Requirement and Notes tab, add the association for each test. The association added for each Test Suite will be inherited by its children.
 
-@req represents a Test Run
+@req represents a Test Plan
 @pr represents a Test Case
 
 The test results are correlated using the following logic:
-Each test run (associated with @req) can contain multiple test cases (associated with @pr). Each individual SOAtest test result is  considered to be a test case step.
+Each test plan (associated with @req) can contain multiple test cases (associated with @pr). Each individual SOAtest test result is considered to be a test case step.
 
 ```
 Example.tst
@@ -44,42 +61,40 @@ Example.tst
 will be translated into this in TFS
 
 ```
-TestPlan
- ---Test Run with id 1
+TestPlan with id 1
   ---Test Case with id 2
      ---two test steps
- ---Test Run with id 3
+Test Plan with id 3
   ---Test Case with id 4
 ```
-
-
-### MTM
-Same structure in MTM
-![MTM Screenshot](/SOAtestToMTM/images/mtm.jpg)
-
 
 ## How to Build
 
 ### Visual Studio
 * Open the SOAtestToMTM solution in Visual Studio
-* Update the missing Nuget Dependencies
+* Update the missing Nuget Dependencies by enabling Nuget Restore 
 * Build the Solution
 
 ### Command Line
-TBA
+* Update the missing Nuget Dependencies with nuget.exe install SOAtestToMTMT/MTMImporter/packages.config
+* In the VS Developer Command Prompt, build the solution with msbuild SOAtestToMTM.sln
 
 ## How to Run
-The MTM Importer executable requires the uri to Team Foundation Server and the valid credentials. A valid project name is also required to import SOAtest Result.
-In a command prompt, run the MTM Importer executable with the following arguments:
-```
-MTMImporter.exe <TFS uri> <TFS username> <TFS password> <TFS domain> <TFS Project> <path to SOAtest report.xml>
-```
+Running MTMImporter.exe with --help will show the required parameters:
+![Help](/images/help.jpg)
 
-When the import is completed without error, the following message will be displayed:
+This importer example also includes a simple cipher to encrypt passwords.
 
 ```
-C:\Example>MTMImporter.exe http://tfs2013.parasoft.com:8080/tfs/DefaultCollection username password PARASOFT "Project A" "C:\Report\report.xml"
-Import completed
+ MTMImporter.exe --encrypt 'password'
+ 8oT4LZP6D3g2aord/gkXmR/Myfw/1M4F
+```
+
+Example command line:
+
+```
+ C:\Example>MTMImporter.exe --uri http://tfs2013.parasoft.com:8080/tfs/DefaultCollection --username user 
+ --password pass --domain PARASOFT -- project "Project A" --report "C:\Report\report.xml"
 ```
 
 
@@ -88,55 +103,55 @@ Import completed
 ### Overview
 Report.xml contains a lot of information; here, we will focus only on several key elements.
 
-Our example uses XMLReader for the sake of simplicity and efficiencys. It expects elements in the following order (default order):
+Our example uses XMLReader for the sake of simplicity and efficiency. It expects elements in the following order (default order):
 
-1. `ResultsSession` root element and its attributes to get general information for the test run, such as project, session tag, test start time and build number.
+1. `ResultsSession` root element and its attributes to get general test run information, such as project, session tag, test start time and build number.
 2. `TestConfig` element for the configuration and user.
-3. `ExecutedTestsDetails` element and its children to gather test result
+3. `ExecutedTestsDetails` element and its children to gather test results.
 4. `FuncViols` element for test failures.
 
 ##### ResultsSession
 ResultsSession is the root element in SOAtest report.xml. The following attributes will be used to populate information for a MTM Test Run.
-* `buildId`: For build number
-* `project`: For project name
-* `tag`: For test environment. Note that tag is a user-defined field ("Session Tag" in SOAtest). It can be used to group multiple reports-- in this case, a test environment
-* `time`: For time start time 
+* `buildId`: For build number.
+* `project`: For project name.
+* `tag`: For test environment. Note that tag is a user-defined field ("Session Tag" in SOAtest). It can be used to group multiple reports-- in this case, we group by test environment.
+* `time`: For time start time.
 
 ##### TestConfig
-`TestConfig` is the first child element in `ResultsSession`
-* `name`: For Configuration name
-* `user`: For the test run user
+`TestConfig` is the first child element in `ResultsSession`.
+* `name`: For the Configuration name.
+* `user`: For the test run user.
 
 
 ##### ExecutedTestsDetails
 `ExecutedTestsDetails` is the next element that will be parsed. It contains multiple levels that eventually traverse down to 'Test' elements that contain the results of each individual test.
-Test results are collected in the parent `TestSuite`, which can be self nested. 
+Test results are collected in the parent `TestSuite`, which can be self-nested. 
 The hierarchy is represented as:  `ExecutedTestsDetails` --> `Total` --> `Project` (tst files) --> nesting `TestSuites` --> `Test`
 The attributes used in `Test` elements are:
-* `id`: For mapping test failure messages later
-* `fail`: With value > 0, indicates that the test failed
-* `pass`: With value > 0, indicates that the test passed
-* `startTime`: The time (in ms) that the test started
-* `time` The duration of the test (from start until completion)
+* `id`: For mapping test failure messages later.
+* `fail`: With value > 0, indicates that the test failed.
+* `pass`: With value > 0, indicates that the test passed.
+* `startTime`: The time (in ms) that the test started.
+* `time` The duration of the test (from start until completion).
 
 ##### assoc
-`assoc`: Assoc elements are children of `Test`. They contain the requirement associations that user has specified in each test suite.
-* `tag`: The association tag used to determine if the test associated to a Test Run "req" or a Test Case "pr"
-* `id`: The corresponding id of the Test Run or Test Case in TFS
+`assoc`: Assoc elements are children of `Test`. They contain the requirement associations that were specified in each test suite.
+* `tag`: The association tag used to determine if the test is associated with a Test Run "req" or a Test Case "pr".
+* `id`: The corresponding id of the Test Run or Test Case in TFS.
 
 #### FuncViols
 `FuncViols`: A list of `FuncViol` that contains the following attributes:
-* `sev`: The severity of the test result (1 is the highest)
-* `taskType`: The type the failure; typical values are "Miscellaneous Errors"
-* `msg`: The failure message, which can be added as a comment to the Test Case
-* `testCaseId`: The id of the test case that caused this failure
+* `sev`: The severity of the test result (1 is the highest).
+* `taskType`: The type the failure; typical values are "Miscellaneous Errors".
+* `msg`: The failure message, which can be added as a comment to the Test Case.
+* `testCaseId`: The id of the test case that caused this failure.
 
 ## Importing results into MTM
 
 The `MTMImporter` project uses the [Team Foundation Server API](https://msdn.microsoft.com/en-us/library/bb130146(v=vs.120).aspx) to construct results for Test Plans.
-It re-maps the parsed ResultSession object into a a list of `TFSTestRun` and create run results in MTM.
-The test results are re-arranged in the logic mentioned in the prerequisites:
-In each test run (associated with @req) can contain multiple test cases (associated with @pr), each indivdual test results in SOAtest are considered as steps for each test case.
+It re-maps the parsed ResultSession object into a list of `TFSTestRun` and creates run results in MTM.
+The test results are re-arranged according to the logic mentioned in the prerequisites:
+Each test run (associated with @req) can contain multiple test cases (associated with @pr). Each indivdual test result in SOAtest is considered to be a test case step.
 
 
 
@@ -161,12 +176,12 @@ https://raw.githubusercontent.com/JamesNK/Newtonsoft.Json/master/LICENSE.md
 
 Microsoft Visual Studio Services Client
 Microsoft Corporation
-version 14.89.0
+Version 14.89.0
 https://www.microsoft.com/net/dotnet_library_license.htm
 
 Microsoft Visual Studio Services Client (Interactive)
 Microsoft Corporation
-version 14.89.0
+Version 14.89.0
 https://www.microsoft.com/net/dotnet_library_license.htm
 
 Miscrosoft ASP.NET Web API 2.2 Client Libraries
@@ -191,10 +206,15 @@ https://raw.githubusercontent.com/WindowsAzure/azure-sdk-for-net/master/LICENSE.
 
 Microsoft Team Foundation Server Client
 Microsoft Corporation
-version 14.89.0
+Version 14.89.0
 https://www.microsoft.com/net/dotnet_library_license.htm
 
 Microsoft Team Foundation Server Extended Client
 Microsoft Corporation
-version 14.89.0
+Version 14.89.0
 https://www.microsoft.com/net/dotnet_library_license.htm
+
+Command Line Parser Library
+Giacomo Stelluti Scala
+Version 1.9.71
+https://github.com/gsscoder/commandline/blob/master/License.md

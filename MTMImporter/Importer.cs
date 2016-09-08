@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.IO;
+using System.Security.Cryptography;
+using CommandLine;
 
 namespace SOAtestToMTM
 {
@@ -318,21 +320,32 @@ namespace SOAtestToMTM
         {
             try
             {
-                ValidateArguments(args);
-                var uri = args[0];
-                var username = args[1];
-                var password = args[2];
-                var domain = args[3];
-                var teamProject = args[4];
-                Parser parser = new Parser();
-                var resultsSession = parser.Parse(args[5]);
-                var testRun = ConvertResultToTestRun(resultsSession);
-                var importer = new Importer(uri, username, password, domain);
-                importer.Import(teamProject, testRun);
+                bool isEncrypt = args.Length == 2 && args[0] == "--encodePass";
+                if (isEncrypt)
+                {
+                    Console.WriteLine(SimpleCipher.Encrypt(args[1]));
+                }
+                else
+                {
+                    var options = new Options();
+                    if (!CommandLine.Parser.Default.ParseArguments(args, options))
+                    {
+                        Environment.Exit(CommandLine.Parser.DefaultExitCodeFail);
+                    }
+
+                    var password = SimpleCipher.TryDecrypt(options.Password);
+                    var resultsSession = Parser.Parse(options.Report);
+                    var testRun = ConvertResultToTestRun(resultsSession);
+                    var importer = new Importer(options.URI, options.Username, password, options.Domain);
+                    importer.Import(options.Project, testRun);
+
+
+                }
+
             }
             catch (FileNotFoundException e)
             {
-                Error("SOAtest report not found, " + args[5] + " does not exist");
+                Error(e.Message);
             }
             catch (ImportException e)
             {
@@ -346,21 +359,9 @@ namespace SOAtestToMTM
             {
                 Error(e.Message);
             }
-            catch(System.UriFormatException e)
+            catch (System.UriFormatException e)
             {
                 Error("Invalid TFS Uri provided: " + args[0]);
-            }
-            finally
-            {
-                Console.WriteLine("Import completed");
-            }
-        }
-
-        private static void ValidateArguments(string[] args)
-        {
-            if (args.Length < 6)
-            {
-                throw new ImportException("There are missing required parameters. The executable expects the following arguments:" + Environment.NewLine + "MTMImporter.exe <TFS uri> <TFS username> <TFS password> <TFS domain> <TFS Project> <path to SOAtest report.xml>");
             }
         }
 
@@ -438,13 +439,15 @@ namespace SOAtestToMTM
         }
 
 
-        [Serializable]
-        private sealed class ImportException : Exception
-        {
-            public ImportException() : base() { }
-            public ImportException(string message) : base(message) { }
-            public ImportException(string message, Exception cause) : base(message, cause) { }
 
-        }
+    }
+
+    [Serializable]
+    public sealed class ImportException : Exception
+    {
+        public ImportException() : base() { }
+        public ImportException(string message) : base(message) { }
+        public ImportException(string message, Exception cause) : base(message, cause) { }
+
     }
 }

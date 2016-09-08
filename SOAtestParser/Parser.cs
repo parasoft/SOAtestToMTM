@@ -5,14 +5,14 @@ using System.Xml;
 
 namespace SOAtestToMTM
 {
-    public class Parser
+    public static class Parser
     {
         /// <summary>
         /// parse a SOAtest report.xml file into ResultsSession object
         /// </summary>
         /// <param name="pathToXmlFile">full path to file</param>
         /// <returns>ResultsSession Object</returns>
-        public ResultsSession Parse(string pathToXmlFile)
+        public static ResultsSession Parse(string pathToXmlFile)
         {
             string filePath = @pathToXmlFile;
             if (File.Exists(filePath))

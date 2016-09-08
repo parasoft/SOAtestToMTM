@@ -10,9 +10,8 @@ namespace SOAtestToMTM
         [TestMethod]
         public void TestParserPositive()
         {
-            Parser parser = new Parser();
             string filePath = @"..\..\TestData\report.xml";
-            ResultsSession rs = parser.Parse(filePath);
+            ResultsSession rs = Parser.Parse(filePath);
             Assert.AreEqual<String>(rs.Project, "Default Project");
             Assert.AreEqual<String>(rs.Config, "Example Configuration");
             Assert.AreEqual<String>(rs.Tag, "Example Configuration");
@@ -31,9 +30,8 @@ namespace SOAtestToMTM
         [ExpectedException(typeof(FileNotFoundException))]
         public void TestParserFileNotExist()
         {
-            Parser parser = new Parser();
             string filePath = @"..\..\TestData\report1.xml";
-            ResultsSession rs = parser.Parse(filePath);
+            ResultsSession rs = Parser.Parse(filePath);
         }
 
     }

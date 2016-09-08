@@ -10,12 +10,21 @@ namespace SOAtestToMTM
         [TestMethod]
         public void TestImporterConvertToTestRun()
         {
-            Parser parser = new Parser();
             string filePath = @"..\..\TestData\report.xml";
-            ResultsSession rs = parser.Parse(filePath);
+            ResultsSession rs = Parser.Parse(filePath);
             List<TFSTestRun> testRuns = Importer.ConvertResultToTestRun(rs);
             Assert.AreEqual(testRuns.Count, 1);
-            
+
         }
+
+        [TestMethod]
+        public void TestSimpleCipher()
+        {
+            string password = "password";
+            string encrypted = SimpleCipher.Encrypt(password);
+            Assert.AreEqual(password, SimpleCipher.TryDecrypt(encrypted));
+
+        }
+
     }
 }
